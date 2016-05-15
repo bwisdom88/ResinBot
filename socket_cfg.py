@@ -1,15 +1,16 @@
+import string
 import socket
 from cfg import HOST, PORT, PASS, NICK, CHAN
 
 def open_socket():
 	s = socket.socket()
 	s.connect((HOST, PORT))
-	s.send("PASS " + PASS + "\r\n")
-	s.send("NICK " + NICK + "\r\n")
-	s.send("JOIN #" + CHAN + "\r\n")
+	s.send(bytes("PASS " + PASS + "\r\n", "UTF-8"))
+	s.send(bytes("NICK " + NICK + "\r\n", "UTF-8"))
+	s.send(bytes("JOIN #" + CHAN + "\r\n", "UTF-8"))
 	return s
 
 def send_message(s, message):
 	message_temp = "PRIVMSG #" + CHAN + " :" + message
-	s.send(message_temp + "\r\n")
+	s.send(bytes(message_temp + "\r\n", "UTF-8"))
 	print("Sent: " + message_temp)
