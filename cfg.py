@@ -44,7 +44,7 @@ def get_user(line):
 def get_message(line):
 	separate = line.split(":", 2)
 	if separate[0] == "PING ":
-		s.send(bytes("PONG :tmi.twitch.tv\r\n".encode("UTF-8")))
+		message = separate[0]
 	else:
 		message = separate[2]
 	return message

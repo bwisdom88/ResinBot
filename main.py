@@ -5,7 +5,7 @@ Ideas:
 !mods
 Follower notification in chat
 Sub notification in chat
-
+Find a way to make commands only work for subs
 '''
 
 import string
@@ -14,49 +14,60 @@ from cfg import *
 s = open_socket()
 join_room(s)
 readbuffer = ""
-temp_list = ""
 commands = ["!songrequest", "!song", "!mods"]
-added_commands = []
-added_commands_text = []
 
 while True:
 	readbuffer = readbuffer + s.recv(1024).decode("UTF-8")
 	temp = str.split(readbuffer, "\n")
 	readbuffer = temp.pop()
+	songlist = open("songlist.txt", "r+")
 
 	for line in temp:
 		print(line)
 		user = get_user(line)
 		message = get_message(line)
-		analysis = message.split(" ")
-		#print(user + " typed :" + message)
+		#analysis = message.split(" ")
+		print (message)
+		print (user)
 
-		#if "!commands" in message:
-		if analysis[0] == "!commands":
-			merged_lists = commands + added_commands
-			for command in merged_lists:
-				temp_list += str(command) + ", "
-			send_message(s, "These are channel commands: " + temp_list)
+		if message == "PING ":
+			print("PONG send attempt")
+			s.send(bytes("PONG :tmi.twitch.tv\r\n".encode("UTF-8")))
+			print("PONG sent successfully")
 
-		#if "!addcomm" in message && user == CHAN:
-		elif analysis[0] == "!addcomm" && user == CHAN:
-			breakdown = message.split(" +")
-			added_commands.extend[breakdown[1]]
-			added_commands_text.extend[breakdown[2]]
+		if message == "!commands":
+			print("Commands if statement")
+			send_message(s, "These are channel commands: " + commands)
 
-		#if "!songrequest" in message:
-		elif analysis[0] == "!songrequest":
+		if message == "!test":
+			print("Does this work?")
+
+		else:
+			print("You Fail")
+		#This is a feature that will be revisted later
+#		elif analysis[0] == "!addcomm" and user == CHAN:
+#			breakdown = message.split(" +")
+#			added_commands.extend[breakdown[1]]
+#			added_commands_text.extend[breakdown[2]]
+
+		#elif analysis[0] == "!songrequest":
+			#breakdown = message.split(" ")
+			#print(breakdown[1])
+			#songlist.write(breakdown[1] + "\r\n")
 			#take URL and add it to a list for playback
 			#2 part list split by space
 			#once played remove from list
 			#blacklist? How?
 			#guard against evil requests
+			#https://www.youtube.com/watch?v=PajEshrnGdY
 
 		#if "!song" in message:
-		elif analysis[0] == "!song":
+		#elif analysis[0] == "!song":
 
-		elif analysis[0] == "!pausebot" && user == CHAN:
+		#elif analysis[0] == "!pausebot" and user == CHAN:
 			#put bot to sleep
 			#if we do this how do we restart it?
 
-		elif analysis[0] == "!startbot" && user == CHAN:
+		#elif analysis[0] == "!startbot" and user == CHAN:
+	#playing songs
+	#status blurb every 30 minutes
