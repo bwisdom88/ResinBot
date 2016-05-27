@@ -37,8 +37,10 @@ def loading_complete(line):
 		return True
 
 def get_user(line):
+	print("Line: " + line)
 	separate = line.split(":", 2)
-	user = separate[1].split("!", 1)[0]
+	#user = separate[1].split("!", 1)[0]
+	user = separate[1]
 	return user
 
 def get_message(line):
@@ -48,8 +50,9 @@ def get_message(line):
 	else:
 		message = separate[2]
 	return message
-
+'''
 def send_message(s, message):
 	message_temp = "PRIVMSG #" + CHAN + " :" + message
 	s.send(bytes(message_temp + "\r\n", "UTF-8"))
 	print("Sent: " + message_temp)
+'''
