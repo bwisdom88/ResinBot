@@ -9,65 +9,49 @@ Find a way to make commands only work for subs
 '''
 
 import string
+import time
 from cfg import *
 
 s = open_socket()
 join_room(s)
 readbuffer = ""
 commands = ["!songrequest", "!song", "!mods"]
+elapsed_time = int(time.time())
 
 while True:
 	readbuffer = readbuffer + s.recv(1024).decode("UTF-8")
 	temp = str.split(readbuffer, "\n")
+	#test_line = input("Enter test line: ")
+	#line = ":resinplays!:" + test_line
 	readbuffer = temp.pop()
 	songlist = open("songlist.txt", "r+")
 
 	for line in temp:
-		print(line)
+		print("Line: " + line)
 		user = get_user(line)
 		message = get_message(line)
-		#analysis = message.split(" ")
-		print (message)
-		print (user)
+		print ("Message: " + message)
+		print ("User: " + user)
 
-		if message == "PING ":
+		if message == "PING " and user == tmi.twitch.tv:
 			print("PONG send attempt")
 			s.send(bytes("PONG :tmi.twitch.tv\r\n".encode("UTF-8")))
 			print("PONG sent successfully")
 
-		if message == "!commands":
+		elif message == "!commands":
 			print("Commands if statement")
 			send_message(s, "These are channel commands: " + commands)
 
-		if message == "!test":
+		elif message == "!test":
 			print("Does this work?")
 
 		else:
 			print("You Fail")
-		#This is a feature that will be revisted later
-#		elif analysis[0] == "!addcomm" and user == CHAN:
-#			breakdown = message.split(" +")
-#			added_commands.extend[breakdown[1]]
-#			added_commands_text.extend[breakdown[2]]
 
-		#elif analysis[0] == "!songrequest":
-			#breakdown = message.split(" ")
-			#print(breakdown[1])
-			#songlist.write(breakdown[1] + "\r\n")
-			#take URL and add it to a list for playback
-			#2 part list split by space
-			#once played remove from list
-			#blacklist? How?
-			#guard against evil requests
-			#https://www.youtube.com/watch?v=PajEshrnGdY
+		time.sleep(30)
 
-		#if "!song" in message:
-		#elif analysis[0] == "!song":
-
-		#elif analysis[0] == "!pausebot" and user == CHAN:
-			#put bot to sleep
-			#if we do this how do we restart it?
-
-		#elif analysis[0] == "!startbot" and user == CHAN:
-	#playing songs
-	#status blurb every 30 minutes
+	#blurb that plays every 30 minutes
+	if int(time.time()) - elapsed_time >= 1800:
+		#print("Welcome to the stream! Feel free to ask questions or chat, I promise I'm watching!")
+		send_message(s, "Welcome to the stream! Feel free to ask questions or chat, I promise I'm watching!")
+		elapsed_time = time.time()
